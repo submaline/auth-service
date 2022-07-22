@@ -9,8 +9,6 @@ COPY cmd ./cmd
 COPY gen ./gen
 COPY *.go ./
 
-RUN apk add build-base
-
 RUN go build -o app ./cmd/auth-service/main.go
 
 
