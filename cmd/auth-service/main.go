@@ -25,7 +25,7 @@ func main() {
 	addr := fmt.Sprintf(":%s", port)
 
 	// h2cはインセキュア通信でhttp2を実現するための実装
-	log.Printf("Service listenging on %v", port)
+	log.Printf("Service listening on %v", port)
 	if err := http.ListenAndServe(
 		addr,
 		h2c.NewHandler(mux, &http2.Server{}),
