@@ -7,6 +7,7 @@ import (
 	"github.com/bufbuild/connect-go"
 	authService "github.com/submaline/auth-service"
 	"github.com/submaline/auth-service/gen/auth/v1/authv1connect"
+	"github.com/submaline/auth-service/gen/supervisor/v1/supervisorv1connect"
 	"github.com/submaline/interceptors"
 	"go.uber.org/zap"
 	"golang.org/x/net/http2"
@@ -17,8 +18,6 @@ import (
 )
 
 func main() {
-	authServiceHandler := &authService.AuthService{}
-
 	app, err := firebase.NewApp(context.Background(), nil)
 	if err != nil {
 		log.Fatalf("failed to setup firebase app: %v", err)
@@ -32,7 +31,19 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to setup logger: %v", err)
 	}
-	defer logger.Sync()
+	defer func(logger *zap.Logger) {
+		_ = logger.Sync()
+	}(logger)
+
+	supervisorServiceClient := supervisorv1connect.NewSupervisorServiceClient(
+		http.DefaultClient,
+		os.Getenv("SUPERVISOR_SERVICE_URL"))
+
+	authServiceHandler := &authService.AuthService{
+		AuthClient:       authClient,
+		SupervisorClient: &supervisorServiceClient,
+		Logger:           logger,
+	}
 
 	mux := http.NewServeMux()
 	inters := connect.WithInterceptors(
