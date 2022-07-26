@@ -5,6 +5,7 @@ go 1.18
 require (
 	firebase.google.com/go/v4 v4.8.0
 	github.com/bufbuild/connect-go v0.2.0
+	github.com/pkg/errors v0.9.1
 	github.com/submaline/interceptors v0.1.1
 	go.uber.org/zap v1.21.0
 	golang.org/x/net v0.0.0-20220708220712-1185a9018129
