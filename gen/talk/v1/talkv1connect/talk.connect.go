@@ -29,6 +29,12 @@ const (
 type TalkServiceClient interface {
 	SendMessage(context.Context, *connect_go.Request[v1.SendMessageRequest]) (*connect_go.Response[v1.SendMessageResponse], error)
 	SendReadReceipt(context.Context, *connect_go.Request[v1.SendReadReceiptRequest]) (*connect_go.Response[v1.SendReadReceiptResponse], error)
+	CreateGroup(context.Context, *connect_go.Request[v1.CreateGroupRequest]) (*connect_go.Response[v1.CreateGroupResponse], error)
+	UpdateGroup(context.Context, *connect_go.Request[v1.UpdateGroupRequest]) (*connect_go.Response[v1.UpdateGroupResponse], error)
+	InviteIntoGroup(context.Context, *connect_go.Request[v1.InviteIntoGroupRequest]) (*connect_go.Response[v1.InviteIntoGroupResponse], error)
+	JoinGroupViaInvitation(context.Context, *connect_go.Request[v1.JoinGroupViaInvitationRequest]) (*connect_go.Response[v1.JoinGroupViaInvitationResponse], error)
+	LeaveGroup(context.Context, *connect_go.Request[v1.LeaveGroupRequest]) (*connect_go.Response[v1.LeaveGroupResponse], error)
+	KickOutFromGroup(context.Context, *connect_go.Request[v1.KickOutFromGroupRequest]) (*connect_go.Response[v1.KickOutFromGroupResponse], error)
 }
 
 // NewTalkServiceClient constructs a client for the talk.v1.TalkService service. By default, it uses
@@ -51,13 +57,49 @@ func NewTalkServiceClient(httpClient connect_go.HTTPClient, baseURL string, opts
 			baseURL+"/talk.v1.TalkService/SendReadReceipt",
 			opts...,
 		),
+		createGroup: connect_go.NewClient[v1.CreateGroupRequest, v1.CreateGroupResponse](
+			httpClient,
+			baseURL+"/talk.v1.TalkService/CreateGroup",
+			opts...,
+		),
+		updateGroup: connect_go.NewClient[v1.UpdateGroupRequest, v1.UpdateGroupResponse](
+			httpClient,
+			baseURL+"/talk.v1.TalkService/UpdateGroup",
+			opts...,
+		),
+		inviteIntoGroup: connect_go.NewClient[v1.InviteIntoGroupRequest, v1.InviteIntoGroupResponse](
+			httpClient,
+			baseURL+"/talk.v1.TalkService/InviteIntoGroup",
+			opts...,
+		),
+		joinGroupViaInvitation: connect_go.NewClient[v1.JoinGroupViaInvitationRequest, v1.JoinGroupViaInvitationResponse](
+			httpClient,
+			baseURL+"/talk.v1.TalkService/JoinGroupViaInvitation",
+			opts...,
+		),
+		leaveGroup: connect_go.NewClient[v1.LeaveGroupRequest, v1.LeaveGroupResponse](
+			httpClient,
+			baseURL+"/talk.v1.TalkService/LeaveGroup",
+			opts...,
+		),
+		kickOutFromGroup: connect_go.NewClient[v1.KickOutFromGroupRequest, v1.KickOutFromGroupResponse](
+			httpClient,
+			baseURL+"/talk.v1.TalkService/KickOutFromGroup",
+			opts...,
+		),
 	}
 }
 
 // talkServiceClient implements TalkServiceClient.
 type talkServiceClient struct {
-	sendMessage     *connect_go.Client[v1.SendMessageRequest, v1.SendMessageResponse]
-	sendReadReceipt *connect_go.Client[v1.SendReadReceiptRequest, v1.SendReadReceiptResponse]
+	sendMessage            *connect_go.Client[v1.SendMessageRequest, v1.SendMessageResponse]
+	sendReadReceipt        *connect_go.Client[v1.SendReadReceiptRequest, v1.SendReadReceiptResponse]
+	createGroup            *connect_go.Client[v1.CreateGroupRequest, v1.CreateGroupResponse]
+	updateGroup            *connect_go.Client[v1.UpdateGroupRequest, v1.UpdateGroupResponse]
+	inviteIntoGroup        *connect_go.Client[v1.InviteIntoGroupRequest, v1.InviteIntoGroupResponse]
+	joinGroupViaInvitation *connect_go.Client[v1.JoinGroupViaInvitationRequest, v1.JoinGroupViaInvitationResponse]
+	leaveGroup             *connect_go.Client[v1.LeaveGroupRequest, v1.LeaveGroupResponse]
+	kickOutFromGroup       *connect_go.Client[v1.KickOutFromGroupRequest, v1.KickOutFromGroupResponse]
 }
 
 // SendMessage calls talk.v1.TalkService.SendMessage.
@@ -70,10 +112,46 @@ func (c *talkServiceClient) SendReadReceipt(ctx context.Context, req *connect_go
 	return c.sendReadReceipt.CallUnary(ctx, req)
 }
 
+// CreateGroup calls talk.v1.TalkService.CreateGroup.
+func (c *talkServiceClient) CreateGroup(ctx context.Context, req *connect_go.Request[v1.CreateGroupRequest]) (*connect_go.Response[v1.CreateGroupResponse], error) {
+	return c.createGroup.CallUnary(ctx, req)
+}
+
+// UpdateGroup calls talk.v1.TalkService.UpdateGroup.
+func (c *talkServiceClient) UpdateGroup(ctx context.Context, req *connect_go.Request[v1.UpdateGroupRequest]) (*connect_go.Response[v1.UpdateGroupResponse], error) {
+	return c.updateGroup.CallUnary(ctx, req)
+}
+
+// InviteIntoGroup calls talk.v1.TalkService.InviteIntoGroup.
+func (c *talkServiceClient) InviteIntoGroup(ctx context.Context, req *connect_go.Request[v1.InviteIntoGroupRequest]) (*connect_go.Response[v1.InviteIntoGroupResponse], error) {
+	return c.inviteIntoGroup.CallUnary(ctx, req)
+}
+
+// JoinGroupViaInvitation calls talk.v1.TalkService.JoinGroupViaInvitation.
+func (c *talkServiceClient) JoinGroupViaInvitation(ctx context.Context, req *connect_go.Request[v1.JoinGroupViaInvitationRequest]) (*connect_go.Response[v1.JoinGroupViaInvitationResponse], error) {
+	return c.joinGroupViaInvitation.CallUnary(ctx, req)
+}
+
+// LeaveGroup calls talk.v1.TalkService.LeaveGroup.
+func (c *talkServiceClient) LeaveGroup(ctx context.Context, req *connect_go.Request[v1.LeaveGroupRequest]) (*connect_go.Response[v1.LeaveGroupResponse], error) {
+	return c.leaveGroup.CallUnary(ctx, req)
+}
+
+// KickOutFromGroup calls talk.v1.TalkService.KickOutFromGroup.
+func (c *talkServiceClient) KickOutFromGroup(ctx context.Context, req *connect_go.Request[v1.KickOutFromGroupRequest]) (*connect_go.Response[v1.KickOutFromGroupResponse], error) {
+	return c.kickOutFromGroup.CallUnary(ctx, req)
+}
+
 // TalkServiceHandler is an implementation of the talk.v1.TalkService service.
 type TalkServiceHandler interface {
 	SendMessage(context.Context, *connect_go.Request[v1.SendMessageRequest]) (*connect_go.Response[v1.SendMessageResponse], error)
 	SendReadReceipt(context.Context, *connect_go.Request[v1.SendReadReceiptRequest]) (*connect_go.Response[v1.SendReadReceiptResponse], error)
+	CreateGroup(context.Context, *connect_go.Request[v1.CreateGroupRequest]) (*connect_go.Response[v1.CreateGroupResponse], error)
+	UpdateGroup(context.Context, *connect_go.Request[v1.UpdateGroupRequest]) (*connect_go.Response[v1.UpdateGroupResponse], error)
+	InviteIntoGroup(context.Context, *connect_go.Request[v1.InviteIntoGroupRequest]) (*connect_go.Response[v1.InviteIntoGroupResponse], error)
+	JoinGroupViaInvitation(context.Context, *connect_go.Request[v1.JoinGroupViaInvitationRequest]) (*connect_go.Response[v1.JoinGroupViaInvitationResponse], error)
+	LeaveGroup(context.Context, *connect_go.Request[v1.LeaveGroupRequest]) (*connect_go.Response[v1.LeaveGroupResponse], error)
+	KickOutFromGroup(context.Context, *connect_go.Request[v1.KickOutFromGroupRequest]) (*connect_go.Response[v1.KickOutFromGroupResponse], error)
 }
 
 // NewTalkServiceHandler builds an HTTP handler from the service implementation. It returns the path
@@ -93,6 +171,36 @@ func NewTalkServiceHandler(svc TalkServiceHandler, opts ...connect_go.HandlerOpt
 		svc.SendReadReceipt,
 		opts...,
 	))
+	mux.Handle("/talk.v1.TalkService/CreateGroup", connect_go.NewUnaryHandler(
+		"/talk.v1.TalkService/CreateGroup",
+		svc.CreateGroup,
+		opts...,
+	))
+	mux.Handle("/talk.v1.TalkService/UpdateGroup", connect_go.NewUnaryHandler(
+		"/talk.v1.TalkService/UpdateGroup",
+		svc.UpdateGroup,
+		opts...,
+	))
+	mux.Handle("/talk.v1.TalkService/InviteIntoGroup", connect_go.NewUnaryHandler(
+		"/talk.v1.TalkService/InviteIntoGroup",
+		svc.InviteIntoGroup,
+		opts...,
+	))
+	mux.Handle("/talk.v1.TalkService/JoinGroupViaInvitation", connect_go.NewUnaryHandler(
+		"/talk.v1.TalkService/JoinGroupViaInvitation",
+		svc.JoinGroupViaInvitation,
+		opts...,
+	))
+	mux.Handle("/talk.v1.TalkService/LeaveGroup", connect_go.NewUnaryHandler(
+		"/talk.v1.TalkService/LeaveGroup",
+		svc.LeaveGroup,
+		opts...,
+	))
+	mux.Handle("/talk.v1.TalkService/KickOutFromGroup", connect_go.NewUnaryHandler(
+		"/talk.v1.TalkService/KickOutFromGroup",
+		svc.KickOutFromGroup,
+		opts...,
+	))
 	return "/talk.v1.TalkService/", mux
 }
 
@@ -105,4 +213,28 @@ func (UnimplementedTalkServiceHandler) SendMessage(context.Context, *connect_go.
 
 func (UnimplementedTalkServiceHandler) SendReadReceipt(context.Context, *connect_go.Request[v1.SendReadReceiptRequest]) (*connect_go.Response[v1.SendReadReceiptResponse], error) {
 	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("talk.v1.TalkService.SendReadReceipt is not implemented"))
+}
+
+func (UnimplementedTalkServiceHandler) CreateGroup(context.Context, *connect_go.Request[v1.CreateGroupRequest]) (*connect_go.Response[v1.CreateGroupResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("talk.v1.TalkService.CreateGroup is not implemented"))
+}
+
+func (UnimplementedTalkServiceHandler) UpdateGroup(context.Context, *connect_go.Request[v1.UpdateGroupRequest]) (*connect_go.Response[v1.UpdateGroupResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("talk.v1.TalkService.UpdateGroup is not implemented"))
+}
+
+func (UnimplementedTalkServiceHandler) InviteIntoGroup(context.Context, *connect_go.Request[v1.InviteIntoGroupRequest]) (*connect_go.Response[v1.InviteIntoGroupResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("talk.v1.TalkService.InviteIntoGroup is not implemented"))
+}
+
+func (UnimplementedTalkServiceHandler) JoinGroupViaInvitation(context.Context, *connect_go.Request[v1.JoinGroupViaInvitationRequest]) (*connect_go.Response[v1.JoinGroupViaInvitationResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("talk.v1.TalkService.JoinGroupViaInvitation is not implemented"))
+}
+
+func (UnimplementedTalkServiceHandler) LeaveGroup(context.Context, *connect_go.Request[v1.LeaveGroupRequest]) (*connect_go.Response[v1.LeaveGroupResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("talk.v1.TalkService.LeaveGroup is not implemented"))
+}
+
+func (UnimplementedTalkServiceHandler) KickOutFromGroup(context.Context, *connect_go.Request[v1.KickOutFromGroupRequest]) (*connect_go.Response[v1.KickOutFromGroupResponse], error) {
+	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("talk.v1.TalkService.KickOutFromGroup is not implemented"))
 }
